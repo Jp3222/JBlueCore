@@ -219,8 +219,8 @@ public final class AppConfig {
     }
 
     private static Object getParameter(JDBConnection connection, String name) throws SQLException {
-        String query = "SELECT value, data_type FROM dev_parameters WHERE parameter = ? AND status = 1";
-        ResultSet rs = connection.query(query, new String[]{name});
+        String query = "SELECT value, data_type FROM dev_parameters WHERE parameter = '" + name + "' AND status = 1";
+        ResultSet rs = connection.query(query);
         if (rs.next()) {
             return rs.getObject(1);
         }
