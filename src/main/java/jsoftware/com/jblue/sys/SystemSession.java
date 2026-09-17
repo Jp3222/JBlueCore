@@ -296,6 +296,8 @@ public class SystemSession implements LocalSession<EmployeeUserDTO>, Serializabl
 
     public ProgramHistoryDTO getProgramHistoryDTO(int table, int enty) {
         ProgramHistoryDTO dto = new ProgramHistoryDTO();
+        dto.setAffected_table(table);
+        dto.setEnty_id(enty);
         dto.setEmployee_id(Integer.parseInt(current_employee.getId()));
         dto.setOffice_id(Integer.parseInt(current_instance.getOfficeId()));
         dto.setCommittee_id(Integer.parseInt(current_instance.getCommitteeId()));
