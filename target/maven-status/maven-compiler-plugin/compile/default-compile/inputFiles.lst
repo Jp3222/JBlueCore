@@ -1,3 +1,10 @@
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\abst\AbstractService.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\abst\AbstractValidation.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\abst\CryptoEngineModel.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\abst\ServiceModel.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\abst\ValidationModel.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\cryp\BCryptCrypto.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\cryp\DeterministicCrypto.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\AdministrationHistoryDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\DeviceHistoryDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\EmployeeUserDAO.java
@@ -32,7 +39,14 @@ C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsof
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\exp\ServiceException.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\exp\SystemException.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\HistoryService.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\LoginService.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\TransactionHistoryService.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\sys\app\AppConfig.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\sys\app\AppFiles.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\sys\SystemSession.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\Func.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\platf\Linux.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\platf\MacOs.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\platf\OsConfig.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\platf\OsConfigModel.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\utils\platf\Windows.java
