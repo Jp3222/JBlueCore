@@ -172,4 +172,8 @@ public class HistoryService {
 
         return true;
     }
+
+    public String currentUser(JDBConnection connection) throws SQLException {
+        return history_dao.getCurrentDBUser(connection);
+    }
 }

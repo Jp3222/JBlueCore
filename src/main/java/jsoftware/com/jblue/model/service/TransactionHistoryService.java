@@ -4,24 +4,26 @@
  */
 package jsoftware.com.jblue.model.service;
 
-import java.io.Serializable;
 import java.sql.SQLException;
+import jsoftware.com.jblue.model.abst.AbstractService;
 import jsoftware.com.jblue.model.dao.TransactionHistoryDAO;
 import jsoftware.com.jblue.model.dto.TransactionHistoryDTO;
 import jsoftware.com.jblue.model.exp.ServiceException;
 import jsoftware.com.jblue.sys.SystemSession;
 import jsoftware.com.jutil.db.JDBConnection;
 
+
 /**
  *
  * @author juanp
  */
-public class TransactionHistoryService implements Serializable {
+public class TransactionHistoryService extends AbstractService {
 
     private TransactionHistoryDAO dao;
 
     public TransactionHistoryService(boolean dev_flag, String process_name) {
-        this.dao = new TransactionHistoryDAO();
+        super(dev_flag, process_name);
+        this.dao = new TransactionHistoryDAO(dev_flag, user_message);
     }
 
     public boolean insert(JDBConnection connection, SystemSession ss, TransactionHistoryDTO dto) throws SQLException, ServiceException {
@@ -31,12 +33,10 @@ public class TransactionHistoryService implements Serializable {
         boolean ok = false;
         try {
             connection.setAutoCommit(false);
-
             ok = dao.insert(connection, dto);
             if (!ok) {
                 throw new ServiceException(1, "TRANSACCION NO REGISTRADA");
             }
-
             connection.commit();
             return true;
         } catch (SQLException | ServiceException e) {

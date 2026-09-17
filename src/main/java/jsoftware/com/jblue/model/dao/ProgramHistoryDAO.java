@@ -63,13 +63,13 @@ public class ProgramHistoryDAO extends AbstractDAO {
                        (transaction_id, type_mov, affected_table, enty_id, description, db_user, committee_id, office_id, employee_id) 
                        VALUES(?,?,?,?,?,USER(),?,?,?)
                        """;
-        try (PreparedStatement ps = connection.getNewPreparedStatement(query)) {
+        try (PreparedStatement ps = connection.getNewPreparedStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             if (res) {
                 ps.setInt(1, dto.getTransaction_id());
             } else {
                 ps.setNull(1, Types.INTEGER);
             }
-            ps.setInt(2, dto.getType_mov());
+            ps.setInt(2, type_mov);
             ps.setInt(3, dto.getAffected_table());
             ps.setInt(4, dto.getEnty_id());
             ps.setString(5, dto.getDescription());
@@ -92,4 +92,26 @@ public class ProgramHistoryDAO extends AbstractDAO {
         return res;
     }
 
+    /**
+     * Obtiene el nombre del usuario autenticado actualmente en la sesión de
+     * base de datos. Ejecuta la función nativa {@code SELECT CURRENT_USER()}
+     * sobre la conexión activa.
+     *
+     * @param connection Enlace a la conexión de base de datos activa.
+     * @return El nombre del usuario de la BD (ej.
+     * {@code "user_jblue@localhost"}) o {@code "UNKNOWN"} si ocurre un error.
+     */
+    public String getCurrentDBUser(JDBConnection connection) throws SQLException {
+        if (connection == null) {
+            return null;
+        }
+        String sql = "SELECT CURRENT_USER()";
+        try (PreparedStatement ps = connection.getNewPreparedStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String dbUser = rs.getString(1);
+                return (dbUser != null && !dbUser.isBlank()) ? dbUser : "UNKNOWN";
+            }
+        }
+        return null;
+    }
 }

@@ -38,7 +38,7 @@ public class DeviceHistoryDAO {
         }
 
         String sql = """
-                 INSERT INTO device_history
+                 INSERT INTO hys_device_history
                  (transaction_id, history_id, instance_id, host_name, ip, db_user, date_register)
                  VALUES (?, ?, ?, ?, ?, ?, ?)
                  """;

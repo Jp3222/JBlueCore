@@ -10,12 +10,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import jsoftware.com.jblue.model.dto.TransactionHistoryDTO;
 import jsoftware.com.jutil.db.JDBConnection;
+import jsoftware.com.jutil.model.AbstractDAO;
 
 /**
  *
  * @author juanp
  */
-public class TransactionHistoryDAO {
+public class TransactionHistoryDAO extends AbstractDAO {
+
+    public TransactionHistoryDAO(boolean flag_dev_log, String name_module) {
+        super(flag_dev_log, name_module);
+    }
 
     /**
      * Inserta un registro de auditoría de transacción en la base de datos.
