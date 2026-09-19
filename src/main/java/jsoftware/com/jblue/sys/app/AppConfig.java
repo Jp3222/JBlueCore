@@ -16,11 +16,11 @@
  */
 package jsoftware.com.jblue.sys.app;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import jsoftware.com.jblue.model.dao.ParametersDAO;
 import jsoftware.com.jutil.db.JDBConnection;
 
 /**
@@ -29,6 +29,7 @@ import jsoftware.com.jutil.db.JDBConnection;
  */
 public final class AppConfig {
 
+    private static final ParametersDAO parameters = ParametersDAO.getInstance(false, AppConfig.class.getName());
     //
     public static final String DB_USER = "DB USER";
     public static final String DB_PASSWORD = "DB PASSWORD";
@@ -203,28 +204,19 @@ public final class AppConfig {
     }
 
     public static boolean getParameterBoolean(JDBConnection connection, String name) throws SQLException {
-        Boolean res = Boolean.valueOf((String) getParameter(connection, name));
-        if (res == null) {
-            return Boolean.FALSE;
-        }
-        return res;
+        return parameters.getBoolean(connection, name);
     }
 
     public static int getParameterInt(JDBConnection connection, String name) throws SQLException {
-        return (int) getParameter(connection, name);
+        return parameters.getInt(connection, name);
     }
 
     public static String getParameterString(JDBConnection connection, String name) throws SQLException {
-        return (String) getParameter(connection, name);
+        return parameters.getString(connection, name);
     }
 
     private static Object getParameter(JDBConnection connection, String name) throws SQLException {
-        String query = "SELECT value, data_type FROM dev_parameters WHERE parameter = '" + name + "' AND status = 1";
-        ResultSet rs = connection.query(query);
-        if (rs.next()) {
-            return rs.getObject(1);
-        }
-        return null;
+        return parameters.getObject(connection, name);
     }
 
     private AppConfig() {
