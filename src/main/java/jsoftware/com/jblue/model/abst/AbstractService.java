@@ -1,5 +1,6 @@
 package jsoftware.com.jblue.model.abst;
 
+import jsoftware.com.jblue.model.service.SystemSessionService;
 import jsoftware.com.jblue.sys.SystemSession;
 import jsoftware.com.jblue.sys.app.AppFiles;
 import jsoftware.com.jblue.utils.Func;
@@ -31,7 +32,12 @@ public abstract class AbstractService implements ServiceModel {
 
     /**
      * Sesión única y centralizada del entorno de ejecución actual.
+     * <br>
+     * usar la clase #{@link SystemSessionService} y mandar a traer la instancia
+     * directamente: #{@link SystemSession#getInstancia()}
+     *
      */
+    @Deprecated
     protected final SystemSession session;
 
     /**
