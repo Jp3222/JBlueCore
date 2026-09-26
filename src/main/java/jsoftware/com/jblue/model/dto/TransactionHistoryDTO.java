@@ -4,6 +4,7 @@
  */
 package jsoftware.com.jblue.model.dto;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -11,7 +12,7 @@ import java.util.Objects;
  *
  * @author juanp
  */
-public class TransactionHistoryDTO {
+public class TransactionHistoryDTO implements Serializable {
 
     private int id;
     private int type_mov;
