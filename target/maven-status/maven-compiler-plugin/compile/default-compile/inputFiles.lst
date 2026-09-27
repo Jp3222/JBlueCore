@@ -9,6 +9,7 @@ C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsof
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\DeviceHistoryDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\EmployeeUserDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\InstanceAuthDAO.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\ParametersDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\ProgramHistoryDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\SessionDAO.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\dao\TransactionHistoryDAO.java
@@ -38,8 +39,10 @@ C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsof
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\exp\service\LoginFailedException.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\exp\ServiceException.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\exp\SystemException.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\fab\ConnectionFactory.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\HistoryService.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\LoginService.java
+C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\SystemSessionService.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\model\service\TransactionHistoryService.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\sys\app\AppConfig.java
 C:\Users\juanp\OneDrive\Documentos\NetBeansProjects\JBlueCore\src\main\java\jsoftware\com\jblue\sys\app\AppFiles.java
