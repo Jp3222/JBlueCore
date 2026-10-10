@@ -40,6 +40,7 @@ jsoftware\com\jblue\model\exp\imp\CorruptLogicDeleteException.class
 jsoftware\com\jblue\model\exp\imp\CorruptUpdateException.class
 jsoftware\com\jblue\model\exp\BlueException.class
 jsoftware\com\jblue\model\exp\service\GenerateInformationException.class
+jsoftware\com\jblue\utils\TestUtils.class
 jsoftware\com\jblue\model\service\LoginService.class
 jsoftware\com\jblue\model\dao\InstanceAuthDAO.class
 jsoftware\com\jblue\model\exp\imp\CorruptInsertionException.class
