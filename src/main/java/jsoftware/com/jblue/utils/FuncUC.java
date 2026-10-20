@@ -22,16 +22,19 @@ public class FuncUC {
      */
     public static String generateFormattedId(String prefix, int committeeId, int officeId, LocalDateTime dateTime) {
         // 1. Formatear la oficina (4 dígitos si es menor a 10000, de lo contrario 8 dígitos)
+        String formattedcommittee = (committeeId < 10000) ? String.format("%04d", officeId) : String.format("%08d", officeId);
+
+        // 1. Formatear la oficina (4 dígitos si es menor a 10000, de lo contrario 8 dígitos)
         String formattedOffice = (officeId < 10000) ? String.format("%04d", officeId) : String.format("%08d", officeId);
 
         // 2. Formatear la fecha y hora (ddMMyyyyHHmmss)
         String formattedDateTime = (dateTime != null) ? dateTime.format(BASE_FORMATTER) : "";
 
         // 3. Sanitizar el prefijo para evitar nulos literales
-        String safePrefix = Objects.toString(prefix, "");
+        String safePrefix = Objects.toString(prefix, "XX");
 
         // 4. Concatenar: prefix + committee_id + office + fecha
-        return safePrefix + committeeId + formattedOffice + formattedDateTime;
+        return safePrefix + formattedcommittee + formattedOffice + formattedDateTime;
     }
 
     /**
