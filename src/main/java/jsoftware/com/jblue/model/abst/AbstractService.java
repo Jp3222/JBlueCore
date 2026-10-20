@@ -5,7 +5,7 @@ import jsoftware.com.jblue.sys.SystemSession;
 import jsoftware.com.jblue.sys.app.AppFiles;
 import jsoftware.com.jblue.utils.Func;
 import jsoftware.com.jutil.db.JDBConnection;
-import jsoftware.com.jutil.util.FuncLogs;
+import jsoftware.com.jutil.util.JFuncLogs;
 
 /**
  * Base abstracta para la capa de servicios del framework JBlue. Centraliza la
@@ -43,12 +43,12 @@ public abstract class AbstractService implements ServiceModel {
     /**
      * Bandera de control para activar trazas de depuración en consola.
      */
-    private final boolean dev_flag;
+    protected final boolean dev_flag;
 
     /**
      * Identificador del módulo o caso de uso para el rastro de logs.
      */
-    private final String process_name;
+    protected final String process_name;
 
     public AbstractService(boolean dev_flag, String process_name) {
         this.user_message = "";
@@ -149,7 +149,7 @@ public abstract class AbstractService implements ServiceModel {
     }
 
     protected void log(Exception e, String method_name) {
-        FuncLogs.logError(
+        JFuncLogs.logError(
                 AppFiles.DIR_PROG_LOG_TODAY,
                 getClass(),
                 e,
