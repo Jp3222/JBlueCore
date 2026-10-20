@@ -74,7 +74,7 @@ public class ParametersDAO extends AbstractDAO {
             ps.setString(1, parameter);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    res = rs.getObject(parameter);
+                    res = rs.getObject("value");
                 }
             }
         }
