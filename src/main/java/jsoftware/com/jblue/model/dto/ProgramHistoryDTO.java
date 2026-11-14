@@ -24,6 +24,7 @@ public class ProgramHistoryDTO {
     private int office_id;
     private int employee_id;
     private LocalDate date_register;
+    private boolean device_bitacore;
 
     public ProgramHistoryDTO() {
         id = 0;
@@ -37,6 +38,7 @@ public class ProgramHistoryDTO {
         office_id = 0;
         employee_id = 0;
         date_register = null;
+        device_bitacore = true;
     }
 
     public int getId() {
@@ -142,6 +144,14 @@ public class ProgramHistoryDTO {
         hash = 17 * hash + this.employee_id;
         hash = 17 * hash + Objects.hashCode(this.date_register);
         return hash;
+    }
+
+    public boolean isDevice_bitacore() {
+        return device_bitacore;
+    }
+
+    public void setDevice_bitacore(boolean device_bitacore) {
+        this.device_bitacore = device_bitacore;
     }
 
     @Override

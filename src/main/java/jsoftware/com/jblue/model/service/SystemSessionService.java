@@ -29,13 +29,20 @@ public class SystemSessionService extends AbstractService {
     }
 
     private static final long serialVersionUID = 1L;
-    private SessionDAO session_dao;
+    private final SessionDAO session_dao;
 
     public SystemSessionService(boolean dev_flag, String process_name) {
         super(dev_flag, process_name);
+        session_dao = new SessionDAO(dev_flag, process_name);
     }
 
     public void valid(JDBConnection connection, SystemSession ss) throws SystemException, SQLException {
+        if (Func.isNull(connection)) {
+            throw new SystemException(1, "SIN CONEXION A BASE DE DATOS");
+        }
+        if (Func.isNull(ss)) {
+            throw new SystemException(1, "SESSION DEL SISTEMA NO VALIDO");
+        }
         boolean res = AppConfig.getParameterBoolean(connection, "SOLO_LECTURA");
         if (res) {
             throw new SystemException(1, "EL SISTEMA ESTA EN MODO LECTURA");

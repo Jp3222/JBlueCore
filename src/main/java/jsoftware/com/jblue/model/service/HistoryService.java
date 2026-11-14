@@ -56,6 +56,11 @@ public class HistoryService {
             throw new ServiceException(1, "REGISTRO EN BITACORA CORRUPTO O NO REALIZADO");
         }
 
+        //SE VALIDA SI EL MOVIMIENTO DEBE REGISTRAR EL DISPOSITIVO
+        if (!dto.isDevice_bitacore()) {
+            return res;
+        }
+
         // 2. Construcción e inserción en historial de dispositivo
         DeviceHistoryDTO dev = ss.getNewDeviceHistoryDTO();
         dev.setTransaction_id(dto.getTransaction_id());
@@ -66,7 +71,7 @@ public class HistoryService {
             throw new ServiceException(2, "REGISTRO DEL DISPOSITIVO CORRUPTO O NO REALIZADO");
         }
 
-        return true;
+        return res;
     }
 
     public boolean update(JDBConnection connection, SystemSession ss, ProgramHistoryDTO dto)
@@ -81,6 +86,10 @@ public class HistoryService {
         if (!res) {
             throw new ServiceException(1, "REGISTRO EN BITACORA CORRUPTO O NO REALIZADO");
         }
+        //SE VALIDA SI EL MOVIMIENTO DEBE REGISTRAR EL DISPOSITIVO
+        if (!dto.isDevice_bitacore()) {
+            return res;
+        }
 
         // 2. Construcción e inserción en historial de dispositivo
         DeviceHistoryDTO dev = ss.getNewDeviceHistoryDTO();
@@ -92,7 +101,7 @@ public class HistoryService {
             throw new ServiceException(2, "REGISTRO DEL DISPOSITIVO CORRUPTO O NO REALIZADO");
         }
 
-        return true;
+        return res;
     }
 
     public boolean delete(JDBConnection connection, SystemSession ss, ProgramHistoryDTO dto)
@@ -108,6 +117,11 @@ public class HistoryService {
             throw new ServiceException(1, "REGISTRO EN BITACORA CORRUPTO O NO REALIZADO");
         }
 
+        //SE VALIDA SI EL MOVIMIENTO DEBE REGISTRAR EL DISPOSITIVO
+        if (!dto.isDevice_bitacore()) {
+            return res;
+        }
+
         // 2. Construcción e inserción en historial de dispositivo
         DeviceHistoryDTO dev = ss.getNewDeviceHistoryDTO();
         dev.setTransaction_id(dto.getTransaction_id());
@@ -118,7 +132,7 @@ public class HistoryService {
             throw new ServiceException(2, "REGISTRO DEL DISPOSITIVO CORRUPTO O NO REALIZADO");
         }
 
-        return true;
+        return res;
     }
 
     public boolean login(JDBConnection connection, SystemSession ss, ProgramHistoryDTO dto)
@@ -134,6 +148,11 @@ public class HistoryService {
             throw new ServiceException(1, "REGISTRO EN BITACORA CORRUPTO O NO REALIZADO");
         }
 
+        //SE VALIDA SI EL MOVIMIENTO DEBE REGISTRAR EL DISPOSITIVO
+        if (!dto.isDevice_bitacore()) {
+            return res;
+        }
+
         // 2. Construcción e inserción en historial de dispositivo
         DeviceHistoryDTO dev = ss.getNewDeviceHistoryDTO();
         dev.setTransaction_id(dto.getTransaction_id());
@@ -144,7 +163,7 @@ public class HistoryService {
             throw new ServiceException(2, "REGISTRO DEL DISPOSITIVO CORRUPTO O NO REALIZADO");
         }
 
-        return true;
+        return res;
     }
 
     public boolean logout(JDBConnection connection, SystemSession ss, ProgramHistoryDTO dto)
@@ -160,6 +179,11 @@ public class HistoryService {
             throw new ServiceException(1, "REGISTRO EN BITACORA CORRUPTO O NO REALIZADO");
         }
 
+        //SE VALIDA SI EL MOVIMIENTO DEBE REGISTRAR EL DISPOSITIVO
+        if (!dto.isDevice_bitacore()) {
+            return res;
+        }
+
         // 2. Construcción e inserción en historial de dispositivo
         DeviceHistoryDTO dev = ss.getNewDeviceHistoryDTO();
         dev.setTransaction_id(dto.getTransaction_id());
@@ -170,7 +194,7 @@ public class HistoryService {
             throw new ServiceException(2, "REGISTRO DEL DISPOSITIVO CORRUPTO O NO REALIZADO");
         }
 
-        return true;
+        return res;
     }
 
     public String currentUser(JDBConnection connection) throws SQLException {

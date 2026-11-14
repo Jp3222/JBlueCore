@@ -301,6 +301,18 @@ public class SystemSession implements LocalSession<EmployeeUserDTO>, Serializabl
         dto.setEmployee_id(Integer.parseInt(current_employee.getId()));
         dto.setOffice_id(Integer.parseInt(current_instance.getOfficeId()));
         dto.setCommittee_id(Integer.parseInt(current_instance.getCommitteeId()));
+        dto.setDevice_bitacore(true);
+        return dto;
+    }
+
+    public ProgramHistoryDTO getProgramHistoryDTO(int table, int enty, boolean device_bitacore) {
+        ProgramHistoryDTO dto = new ProgramHistoryDTO();
+        dto.setAffected_table(table);
+        dto.setEnty_id(enty);
+        dto.setEmployee_id(Integer.parseInt(current_employee.getId()));
+        dto.setOffice_id(Integer.parseInt(current_instance.getOfficeId()));
+        dto.setCommittee_id(Integer.parseInt(current_instance.getCommitteeId()));
+        dto.setDevice_bitacore(device_bitacore);
         return dto;
     }
 }
