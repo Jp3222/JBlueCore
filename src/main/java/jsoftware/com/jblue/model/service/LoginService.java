@@ -24,7 +24,7 @@ import jsoftware.com.jblue.sys.SystemSession;
 import jsoftware.com.jblue.sys.app.AppFiles;
 import jsoftware.com.jblue.utils.Func;
 import jsoftware.com.jutil.db.JDBConnection;
-import jsoftware.com.jutil.util.FuncLogs;
+import jsoftware.com.jutil.util.JFuncLogs;
 
 /**
  * Servicio encargado de la validación criptográfica de accesos, inicialización
@@ -69,7 +69,7 @@ public class LoginService extends AbstractService {
 
             // [1] ENCRIPTAR EL USUARIO DE FORMA DETERMINISTA PARA LA BÚSQUEDA INDEXADA
             String secureUser = DeterministicCrypto.encryp(user, SYSTEM_PEPPER);
-            Optional<EmployeeUserDTO> option = employee_dao.get(connection, secureUser);
+            Optional<EmployeeUserDTO> option = employee_dao.get(connection, ss.getCurrent_instance().getOfficeId(),secureUser);
 
             if (option.isEmpty()) {
                 log("INTENTO DE INICIO DE SESION FALLIDO (USUARIO INEXISTENTE): USUARIO=%s".formatted(user));
@@ -232,10 +232,10 @@ public class LoginService extends AbstractService {
     }
 
     public void log(Exception e, String method_name) {
-        FuncLogs.logError(AppFiles.DIR_PROG_LOG_TODAY, getClass(), e, getProcess_name(), method_name, e.getMessage());
+        JFuncLogs.logError(AppFiles.DIR_PROG_LOG_TODAY, getClass(), e, getProcess_name(), method_name, e.getMessage());
     }
 
     public void log(String message) {
-        FuncLogs.logError(AppFiles.DIR_PROG_LOG_TODAY, "MAIN", message);
+        JFuncLogs.logError(AppFiles.DIR_PROG_LOG_TODAY, "MAIN", message);
     }
 }
