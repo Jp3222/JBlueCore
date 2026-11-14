@@ -20,7 +20,7 @@ public class FuncUC {
      * @param dateTime Instancia de LocalDateTime a formatear
      * @return Cadena concatenada resultante.
      */
-    public static String generateFormattedId(String prefix, int committeeId, int officeId, LocalDateTime dateTime) {
+    public static String generateFormattedId(String prefix, int committeeId, int officeId, LocalDateTime dateTime, String secuencia) {
         // 1. Formatear la oficina (4 dígitos si es menor a 10000, de lo contrario 8 dígitos)
         String formattedcommittee = (committeeId < 10000) ? String.format("%04d", officeId) : String.format("%08d", officeId);
 
@@ -34,11 +34,27 @@ public class FuncUC {
         String safePrefix = Objects.toString(prefix, "XX");
 
         // 4. Concatenar: prefix + committee_id + office + fecha
-        return safePrefix + formattedcommittee + formattedOffice + formattedDateTime;
+        return safePrefix + formattedcommittee + formattedOffice + formattedDateTime + secuencia;
+    }
+
+    /**
+     * Genera un identificador único concatenando el prefijo, el ID del comité,
+     * el ID de la oficina (con formato dinámico de ceros a la izquierda) y la
+     * fecha y hora formateada como ddMMyyyyHHmmss. TODAS LA SECUENCIAS
+     * EMPEZARAN CON UN 2 YA QUE ES EL ID DEL AMBIENTE ACTUAL
+     *
+     * @param committeeId - ID DEL COMITE QUE GENERA EL FOLIO
+     * @param officeId - ID DE LA OFICINA QUE GENERA EL FOLIO
+     * @param secuencia - SECUENCIA UNICA
+     * @return UN FOLIO DE 
+     */
+    public static String generateFormattedId(int committeeId, int officeId, String secuencia) {
+        return generateFormattedId("AP2", committeeId, officeId, LocalDateTime.now(), secuencia);
     }
 
     /**
      * Genera un UUID estándar en formato String.
+     * @return UN UUID COMO STRING
      */
     public static String getUUID() {
         return UUID.randomUUID().toString();
