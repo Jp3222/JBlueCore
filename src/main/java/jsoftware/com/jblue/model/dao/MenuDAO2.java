@@ -90,7 +90,6 @@ public class MenuDAO2 extends AbstractDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     MenuDTO dto = mapResultSetToDTO(rs);
-                    System.out.println(dto.toString());
                     lista.add(dto);
                 }
             }
@@ -118,7 +117,6 @@ public class MenuDAO2 extends AbstractDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     MenuDTO dto = mapResultSetToDTO(rs);
-                    System.out.println(dto.toString());
                     lista.add(dto);
                 }
             }

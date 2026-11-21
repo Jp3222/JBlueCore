@@ -69,7 +69,7 @@ public class LoginService extends AbstractService {
 
             // [1] ENCRIPTAR EL USUARIO DE FORMA DETERMINISTA PARA LA BÚSQUEDA INDEXADA
             String secureUser = DeterministicCrypto.encryp(user, SYSTEM_PEPPER);
-            Optional<EmployeeUserDTO> option = employee_dao.get(connection, ss.getCurrent_instance().getOfficeId(),secureUser);
+            Optional<EmployeeUserDTO> option = employee_dao.get(connection, Integer.parseInt(ss.getCurrent_instance().getOfficeId()), secureUser);
 
             if (option.isEmpty()) {
                 log("INTENTO DE INICIO DE SESION FALLIDO (USUARIO INEXISTENTE): USUARIO=%s".formatted(user));
@@ -90,7 +90,7 @@ public class LoginService extends AbstractService {
             }
 
             // Limpiar contraseña de memoria por seguridad
-            employee.put("password", null);
+            employee.setPassword(null);
 
             // ASIGNAR EMPLEADO A LA SESIÓN LOCAL Y AL DTO
             ss.setCurrentEmployee(employee);
@@ -99,7 +99,7 @@ public class LoginService extends AbstractService {
             // Control de concurrencia de sesiones activas
             res = session_dao.haveActiveSession(connection, employee.getId());
             if (res) {
-                ProgramHistoryDTO hys_close_open_session = ss.getProgramHistoryDTO(132, Integer.parseInt(employee.getId()));
+                ProgramHistoryDTO hys_close_open_session = ss.getProgramHistoryDTO(132, employee.getId());
                 hys_close_open_session.setDescription("CERRAR SESION ABIERTA AUTOMÁTICAMENTE POR NUEVA AUTENTICACIÓN");
 
                 res = hys.logout(connection, ss, hys_close_open_session);
@@ -135,7 +135,7 @@ public class LoginService extends AbstractService {
             ss.put("user-session", secureUser);
 
             // [3] REGISTRO EN BITACORA DE HISTORIAL
-            ProgramHistoryDTO hys_session = ss.getProgramHistoryDTO(132, Integer.parseInt(employee.getId()));
+            ProgramHistoryDTO hys_session = ss.getProgramHistoryDTO(132, employee.getId());
             hys_session.setDescription("INICIO DE SESIÓN");
 
             res = hys.login(connection, ss, hys_session);
@@ -190,7 +190,7 @@ public class LoginService extends AbstractService {
         try {
             // [1] Iniciar transacción atómica
             connection.setAutoCommit(false);
-            ProgramHistoryDTO hys_logout_session = ss.getProgramHistoryDTO(132, Integer.parseInt(ss.getCurrentEmployee().getId()));
+            ProgramHistoryDTO hys_logout_session = ss.getProgramHistoryDTO(132, ss.getCurrentEmployee().getId());
             hys_logout_session.setDescription("FIN DE SESION");
             // [2] Registrar cierre en el historial de bitácora
             res = hys.logout(connection, ss, hys_logout_session);

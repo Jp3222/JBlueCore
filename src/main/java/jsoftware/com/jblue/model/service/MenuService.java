@@ -19,7 +19,6 @@ import jsoftware.com.jblue.model.dto.MenuDTO;
 import jsoftware.com.jblue.model.exp.SystemException;
 import jsoftware.com.jblue.model.view.ProcessModel;
 import jsoftware.com.jblue.sys.SystemSession;
-import jsoftware.com.jblue.sys.app.AppConfig;
 import jsoftware.com.jblue.sys.app.AppFiles;
 import jsoftware.com.jutil.db.JDBConnection;
 import jsoftware.com.jutil.util.JFuncLogs;
@@ -44,12 +43,9 @@ public class MenuService extends AbstractService {
     public Optional<JMenuBar> builMenu(JDBConnection connection, SystemSession ss, JPanel ly, ActionListener listener) {
         //sss_service.valid(connection, ss);
         Optional<JMenuBar> res = Optional.empty();
-        System.out.println(process_name);
-        System.out.println("INICIO METODO MENU");
         try {
             JMenuBar menu_bar = new JMenuBar();
             List<MenuDTO> root_menus = menu_dao.selectByIsRootMenu(connection);
-            System.out.println("Menu Bar");
             for (MenuDTO i : root_menus) {
                 JMenu root_menu = new JMenu(i.getName());
                 root_menu.setActionCommand(i.getAction_command());
@@ -62,11 +58,9 @@ public class MenuService extends AbstractService {
             res = Optional.of(menu_bar);
             returnMessageError(SERVICE_EXECUTE_OK, "TODO OK");
         } catch (SQLException | ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            System.out.println("ERROR METODO MENU - " + process_name + ":" + ex.getMessage());
             JFuncLogs.logError(AppFiles.DIR_PROG_LOG_TODAY, getClass(), ex, process_name, "builMenu", ex.getMessage());
             returnMessageError("ARBOL DE PROCESOS NO GENERADO");
         }
-        System.out.println("FIN METODO MENU");
         return res;
     }
 

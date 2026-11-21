@@ -298,7 +298,7 @@ public class SystemSession implements LocalSession<EmployeeUserDTO>, Serializabl
         ProgramHistoryDTO dto = new ProgramHistoryDTO();
         dto.setAffected_table(table);
         dto.setEnty_id(enty);
-        dto.setEmployee_id(Integer.parseInt(current_employee.getId()));
+        dto.setEmployee_id(current_employee.getId());
         dto.setOffice_id(Integer.parseInt(current_instance.getOfficeId()));
         dto.setCommittee_id(Integer.parseInt(current_instance.getCommitteeId()));
         dto.setDevice_bitacore(true);
@@ -309,7 +309,7 @@ public class SystemSession implements LocalSession<EmployeeUserDTO>, Serializabl
         ProgramHistoryDTO dto = new ProgramHistoryDTO();
         dto.setAffected_table(table);
         dto.setEnty_id(enty);
-        dto.setEmployee_id(Integer.parseInt(current_employee.getId()));
+        dto.setEmployee_id(current_employee.getId());
         dto.setOffice_id(Integer.parseInt(current_instance.getOfficeId()));
         dto.setCommittee_id(Integer.parseInt(current_instance.getCommitteeId()));
         dto.setDevice_bitacore(device_bitacore);

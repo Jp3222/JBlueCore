@@ -1,7 +1,8 @@
 package jsoftware.com.jblue.model.dto;
 
-import jsoftware.com.jblue.utils.Func;
-import jsoftware.com.jutil.db.JDBMapObject;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * DTO correspondiente a las credenciales, accesos y estado de usuarios de
@@ -15,76 +16,219 @@ import jsoftware.com.jutil.db.JDBMapObject;
  * @since 2026-03-21
  * @version 1.0
  */
-public class EmployeeUserDTO extends JDBMapObject {
+public class EmployeeUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private int id;
+    private int employee_id;
+    private int office_id;
+    private String user;
+    private String password;
+    private String description;
+    private String email;
+    private String phone_number;
+    private int employee_type;
+    private int status;
+    private int last_employee_update;
+    private LocalDateTime last_update_password;
+    private LocalDateTime date_update;
+    private LocalDateTime date_register;
+    private LocalDateTime date_end;
+
     public EmployeeUserDTO() {
-        // Inicializa con una capacidad de 32 para albergar de forma eficiente los 15 campos (incluyendo id),
-        // garantizando un factor de carga óptimo sin re-hasheos o redimensionamientos en memoria.
-        super(32);
+        this.id = -1;
+        this.employee_id = -1;
+        this.office_id = -1;
+        this.user = null;
+        this.password = null;
+        this.description = null;
+        this.email = null;
+        this.phone_number = null;
+        this.employee_type = -1;
+        this.status = -1;
+        this.last_employee_update = -1;
+        this.last_update_password = null;
+        this.date_update = null;
+        this.date_register = null;
+        this.date_end = null;
     }
 
-    // Se omite getId() -> Heredado directamente de JDBMapObject de forma limpia
-    public String getEmployeeId() {
-        return Func.nullSafeToString(get("employee_id"));
+    public int getId() {
+        return id;
     }
 
-    public String getOfficeId() {
-        return Func.nullSafeToString(get("office_id"));
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getEmployee_id() {
+        return employee_id;
+    }
+
+    public void setEmployee_id(int employee_id) {
+        this.employee_id = employee_id;
+    }
+
+    public int getOffice_id() {
+        return office_id;
+    }
+
+    public void setOffice_id(int office_id) {
+        this.office_id = office_id;
     }
 
     public String getUser() {
-        return Func.nullSafeToString(get("user"));
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 
     public String getPassword() {
-        return Func.nullSafeToString(get("password"));
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getDescription() {
-        return Func.nullSafeToString(get("description"));
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEmail() {
-        return Func.nullSafeToString(get("email"));
+        return email;
     }
 
-    public String getPhoneNumber() {
-        return Func.nullSafeToString(get("phone_number"));
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getEmployeeType() {
-        return Func.nullSafeToString(get("employee_type"));
+    public String getPhone_number() {
+        return phone_number;
     }
 
-    public String getStatus() {
-        return Func.nullSafeToString(get("status"));
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
     }
 
-    public String getLastEmployeeUpdate() {
-        return Func.nullSafeToString(get("last_employee_update"));
+    public int getEmployee_type() {
+        return employee_type;
     }
 
-    public String getLastUpdatePassword() {
-        return Func.nullSafeToString(get("last_update_password"));
+    public void setEmployee_type(int employee_type) {
+        this.employee_type = employee_type;
     }
 
-    public String getDateUpdate() {
-        return Func.nullSafeToString(get("date_update"));
+    public int getStatus() {
+        return status;
     }
 
-    public String getDateRegister() {
-        return Func.nullSafeToString(get("date_register"));
+    public void setStatus(int status) {
+        this.status = status;
     }
 
-    public String getDateEnd() {
-        return Func.nullSafeToString(get("date_end"));
+    public int getLast_employee_update() {
+        return last_employee_update;
+    }
+
+    public void setLast_employee_update(int last_employee_update) {
+        this.last_employee_update = last_employee_update;
+    }
+
+    public LocalDateTime getLast_update_password() {
+        return last_update_password;
+    }
+
+    public void setLast_update_password(LocalDateTime last_update_password) {
+        this.last_update_password = last_update_password;
+    }
+
+    public LocalDateTime getDate_update() {
+        return date_update;
+    }
+
+    public void setDate_update(LocalDateTime date_update) {
+        this.date_update = date_update;
+    }
+
+    public LocalDateTime getDate_register() {
+        return date_register;
+    }
+
+    public void setDate_register(LocalDateTime date_register) {
+        this.date_register = date_register;
+    }
+
+    public LocalDateTime getDate_end() {
+        return date_end;
+    }
+
+    public void setDate_end(LocalDateTime date_end) {
+        this.date_end = date_end;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + this.id;
+        hash = 83 * hash + this.employee_id;
+        hash = 83 * hash + Objects.hashCode(this.user);
+        hash = 83 * hash + Objects.hashCode(this.password);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final EmployeeUserDTO other = (EmployeeUserDTO) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.employee_id != other.employee_id) {
+            return false;
+        }
+        if (!Objects.equals(this.user, other.user)) {
+            return false;
+        }
+        return Objects.equals(this.password, other.password);
     }
 
     @Override
     public String toString() {
-        // Asegura un vaciado seguro en tus logs de auditoría previniendo excepciones nulas
-        return (values != null) ? values.toString() : "{}";
+        StringBuilder sb = new StringBuilder();
+        sb.append("EmployeeUserDTO{");
+        sb.append("id=").append(id);
+        sb.append(", employee_id=").append(employee_id);
+        sb.append(", office_id=").append(office_id);
+        sb.append(", user=").append(user);
+        sb.append(", password=").append(password);
+        sb.append(", description=").append(description);
+        sb.append(", email=").append(email);
+        sb.append(", phone_number=").append(phone_number);
+        sb.append(", employee_type=").append(employee_type);
+        sb.append(", status=").append(status);
+        sb.append(", last_employee_update=").append(last_employee_update);
+        sb.append(", last_update_password=").append(last_update_password);
+        sb.append(", date_update=").append(date_update);
+        sb.append(", date_register=").append(date_register);
+        sb.append(", date_end=").append(date_end);
+        sb.append('}');
+        return sb.toString();
     }
+
 }

@@ -114,6 +114,12 @@ public abstract class AbstractService implements ServiceModel {
         return error_code != SERVICE_EXECUTE_OK;
     }
 
+    protected boolean returnMessageOk(String msg) {
+        this.error_code = SERVICE_EXECUTE_OK;
+        this.user_message = msg;
+        return error_code == SERVICE_EXECUTE_OK;
+    }
+
     /**
      * Restablece el estado del servicio a un estado inicial exitoso. Es crucial
      * llamarlo antes de iniciar una nueva transacción si la instancia del

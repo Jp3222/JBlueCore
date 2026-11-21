@@ -1,242 +1,196 @@
 package jsoftware.com.jblue.model.dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import jsoftware.com.jblue.model.dto.EmployeeUserDTO;
-import jsoftware.com.jblue.model.exp.DataAccesObjectException;
-import jsoftware.com.jblue.model.exp.imp.CorruptInsertionException;
-import jsoftware.com.jblue.model.exp.imp.CorruptUpdateException;
-import jsoftware.com.jblue.model.exp.imp.KeyNotGenerateException;
 import jsoftware.com.jutil.db.JDBConnection;
 import jsoftware.com.jutil.model.AbstractDAO;
 
 /**
- * Data Access Object (DAO) para la gestión de accesos y credenciales del
- * personal.
- * <br>
- * Administra las transacciones sobre la tabla emp_user.
+ * DAO para la gestión de usuarios, credenciales y datos de contacto de
+ * empleados.
  *
- * * @author JUAN PABLO CAMPOS CASASANERO
- * @since 2026-03-21
- * @version 1.0
+ * @author JUAN PABLO CAMPOS CASASANERO
  */
 public class EmployeeUserDAO extends AbstractDAO {
 
-    private static final long serialVersionUID = 1L;
+    private static final String BASE_COLUMNS
+            = "id, employee_id, office_id, user, password, description, "
+            + "email, phone_number, employee_type, status, last_employee_update, "
+            + "last_update_password, date_update, date_register, date_end";
 
     public EmployeeUserDAO(boolean flag_dev_log, String name_module) {
         super(flag_dev_log, name_module);
     }
 
     /**
-     * Registra las credenciales de acceso para un empleado en el sistema.
-     * <p>
-     * Realiza el casteo manual correspondiente a enteros para las llaves
-     * foráneas y enriquece el DTO tras el éxito de la operación.
-     * </p>
-     *
-     * * @param connection Conexión activa.
-     * @param dto Contenedor dinámico de datos de la credencial del empleado.
-     * @return El ID de la credencial generado por la base de datos.
-     * @throws SQLException Si ocurre un error relacional o duplicidad de nombre
-     * de usuario.
-     * @throws CorruptInsertionException Si las filas afectadas difieren de 1.
-     * @throws KeyNotGenerateException Si no se logra recuperar la clave
-     * autoincrementable.
+     * Inserta un nuevo usuario de empleado y enriquece el DTO con el ID
+     * autogenerado.
      */
-    public int insert(JDBConnection connection, EmployeeUserDTO dto) throws SQLException, CorruptInsertionException, KeyNotGenerateException {
-        int generated_id = 0;
-        String query = """
-                       INSERT INTO emp_user
-                       (employee_id, office_id, user, password, description, 
-                        email, phone_number, employee_type, status, last_employee_update)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?)
-                       """;
+    public boolean insert(JDBConnection connection, EmployeeUserDTO dto) {
+        boolean success = false;
+        String sql = "INSERT INTO emp_user ("
+                + "employee_id, office_id, user, password, description, "
+                + "email, phone_number, employee_type, status, last_employee_update, "
+                + "last_update_password, date_register, date_end"
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement ps = connection.getNewPreparedStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement pstmt = connection.getNewPreparedStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, dto.getEmployee_id());
+            pstmt.setInt(2, dto.getOffice_id());
+            pstmt.setString(3, dto.getUser());
+            pstmt.setString(4, dto.getPassword());
+            pstmt.setString(5, dto.getDescription());
+            pstmt.setString(6, dto.getEmail());
+            pstmt.setString(7, dto.getPhone_number());
+            pstmt.setInt(8, dto.getEmployee_type());
+            pstmt.setInt(9, dto.getStatus());
+            pstmt.setInt(10, dto.getLast_employee_update());
 
-            // 1. Relaciones Foráneas (El DAO realiza el cast final a Integer según MySQL)
-            ps.setInt(1, Integer.parseInt(dto.getEmployeeId()));
-            ps.setInt(2, Integer.parseInt(dto.getOfficeId()));
+            setTimestampOrNull(pstmt, 11, dto.getLast_update_password());
 
-            // 2. Credenciales de Seguridad
-            ps.setString(3, dto.getUser());
-            ps.setString(4, dto.getPassword());
+            LocalDateTime registerDate = dto.getDate_register() != null ? dto.getDate_register() : LocalDateTime.now();
+            pstmt.setTimestamp(12, Timestamp.valueOf(registerDate));
+            setTimestampOrNull(pstmt, 13, dto.getDate_end());
 
-            // 3. Detalles de Perfil y Contacto Opcionales (Uso homogéneo de setNull)
-            setNull(ps, 5, dto.getDescription());
-            setNull(ps, 6, dto.getEmail());
-            setNull(ps, 7, dto.getPhoneNumber());
-
-            // 4. Configuración, Estado y Auditoría
-            ps.setString(8, dto.getEmployeeType());
-            ps.setInt(9, Integer.parseInt(dto.getLastEmployeeUpdate()));
-
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows == PreparedStatement.EXECUTE_FAILED || affectedRows != 1) {
-                throw new CorruptInsertionException();
-            }
-
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (!rs.next()) {
-                    throw new KeyNotGenerateException();
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        dto.setId(generatedKeys.getInt(1));
+                    }
                 }
-                generated_id = rs.getInt(1);
-
-                // Flujo JBlue: Enriquecimiento del DTO post-operación
-                dto.put("id", String.valueOf(generated_id));
+                success = true;
             }
+        } catch (SQLException e) {
+            System.getLogger(EmployeeUserDAO.class.getName())
+                    .log(System.Logger.Level.ERROR, "Error al insertar EmployeeUserDTO", e);
+            success = false;
         }
-        return generated_id;
+        return success;
     }
 
     /**
-     * Busca y valida un registro de credenciales activo mediante usuario y
-     * contraseña.
-     *
-     * * @param connection Conexión activa.
-     * @param user Nombre de usuario único del operador.
-     * @param password Contraseña correspondiente.
-     * @return Un Optional con el EmployeeUserDTO cargado dinámicamente, u
-     * opcional vacío.
-     * @throws SQLException Si ocurre un error en la ejecución del
-     * PreparedStatement.
+     * Actualiza las credenciales (password), el empleado que realizó el cambio
+     * y la marca de tiempo last_update_password por id.
      */
-    public Optional<EmployeeUserDTO> get(JDBConnection connection, String office_id, String user) throws SQLException {
-        Optional<EmployeeUserDTO> result = Optional.empty();
-        String query = "SELECT * FROM emp_user WHERE user = ? AND office_id = ? AND status = 1";
+    public boolean updateCredential(JDBConnection connection, EmployeeUserDTO dto) {
+        boolean success = false;
+        String sql = "UPDATE emp_user SET "
+                + "password = ?, "
+                + "last_employee_update = ?, "
+                + "last_update_password = ? "
+                + "WHERE id = ?";
 
-        try (PreparedStatement ps = connection.getNewPreparedStatement(query)) {
-            // Corrección en el orden secuencial de asignación de parámetros
-            ps.setString(1, user);
-            ps.setString(2, office_id);
+        try (PreparedStatement pstmt = connection.getNewPreparedStatement(sql)) {
+            pstmt.setString(1, dto.getPassword());
+            pstmt.setInt(2, dto.getLast_employee_update());
 
-            try (ResultSet rs = ps.executeQuery()) {
-                // Estructura segura sin duplicación de saltos en el cursor
+            LocalDateTime passUpdate = dto.getLast_update_password() != null
+                    ? dto.getLast_update_password()
+                    : LocalDateTime.now();
+            pstmt.setTimestamp(3, Timestamp.valueOf(passUpdate));
+            pstmt.setInt(4, dto.getId());
+
+            int affectedRows = pstmt.executeUpdate();
+            success = (affectedRows > 0);
+        } catch (SQLException e) {
+            System.getLogger(EmployeeUserDAO.class.getName())
+                    .log(System.Logger.Level.ERROR, "Error al actualizar credenciales de EmployeeUserDTO", e);
+            success = false;
+        }
+        return success;
+    }
+
+    /**
+     * Busca y retorna el registro de usuario de empleado filtrado por nombre de
+     * usuario y oficina.
+     */
+    public Optional<EmployeeUserDTO> get(JDBConnection connection, int officeId, String user) {
+        String sql = "SELECT * FROM emp_user "
+                + "WHERE user = ? AND office_id = ?";
+
+        try (PreparedStatement pstmt = connection.getNewPreparedStatement(sql)) {
+            pstmt.setString(1, user);
+            pstmt.setInt(2, officeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    ResultSetMetaData md = rs.getMetaData();
-                    int size = md.getColumnCount();
-                    String[] fields = new String[size];
-
-                    for (int i = 0; i < size; i++) {
-                        fields[i] = md.getColumnLabel(i + 1);
-                    }
-
-                    EmployeeUserDTO dto = new EmployeeUserDTO();
-                    for (String field : fields) {
-                        // Forzamos minúsculas en las llaves del mapa para prevenir desajustes con el DTO
-                        dto.getMap().put(field.toLowerCase(), rs.getString(field));
-                    }
-                    result = Optional.of(dto);
+                    return Optional.of(mapRow(rs));
                 }
             }
+        } catch (SQLException e) {
+            System.getLogger(EmployeeUserDAO.class.getName())
+                    .log(System.Logger.Level.ERROR, "Error al consultar EmployeeUserDTO por usuario y oficina", e);
         }
-        return result;
+        return Optional.empty();
     }
 
     /**
-     * Aplica actualizaciones selectivas (Delta Updates) modificando solo los
-     * campos mutados.
-     *
-     * * @param connection Conexión transaccional activa.
-     * @param oldUser Datos de las credenciales recuperados previamente de la
-     * BD.
-     * @param newUser Nuevos cambios recolectados de los formularios gráficos de
-     * Swing.
-     * @return true si se aplicó el query con éxito; false si no hubo cambios
-     * detectados.
-     * @throws SQLException Si ocurre un fallo en el motor relacional de MySQL.
+     * Actualiza la información de contacto (email, phone_number y description)
+     * y el último empleado modificador buscando por id.
      */
-    public boolean update(JDBConnection connection, EmployeeUserDTO oldUser, EmployeeUserDTO newUser) throws SQLException {
-        List<String> setColumns = new ArrayList<>();
-        List<Object> parameters = new ArrayList<>();
+    public boolean update(JDBConnection connection, EmployeeUserDTO dto) {
+        boolean success = false;
+        String sql = "UPDATE emp_user SET "
+                + "email = ?, "
+                + "phone_number = ?, "
+                + "description = ?, "
+                + "last_employee_update = ? "
+                + "WHERE id = ?";
 
-        // Escaneo dinámico y seguro de deltas de texto
-        autoSet(oldUser.getUser(), newUser.getUser(), "user", setColumns, parameters);
-        autoSet(oldUser.getPassword(), newUser.getPassword(), "password", setColumns, parameters);
-        autoSet(oldUser.getDescription(), newUser.getDescription(), "description", setColumns, parameters);
-        autoSet(oldUser.getEmail(), newUser.getEmail(), "email", setColumns, parameters);
-        autoSet(oldUser.getPhoneNumber(), newUser.getPhoneNumber(), "phone_number", setColumns, parameters);
-        autoSet(oldUser.getEmployeeType(), newUser.getEmployeeType(), "employee_type", setColumns, parameters);
-        autoSet(oldUser.getStatus(), newUser.getStatus(), "status", setColumns, parameters);
-        autoSet(oldUser.getLastUpdatePassword(), newUser.getLastUpdatePassword(), "last_update_password", setColumns, parameters);
+        try (PreparedStatement pstmt = connection.getNewPreparedStatement(sql)) {
+            pstmt.setString(1, dto.getEmail());
+            pstmt.setString(2, dto.getPhone_number());
+            pstmt.setString(3, dto.getDescription());
+            pstmt.setInt(4, dto.getLast_employee_update());
+            pstmt.setInt(5, dto.getId());
 
-        // Control y parseo manual para llaves foráneas relacionales modificadas
-        if (!java.util.Objects.equals(oldUser.getOfficeId(), newUser.getOfficeId())) {
-            setColumns.add("office_id");
-            parameters.add(Integer.valueOf(newUser.getOfficeId()));
+            int affectedRows = pstmt.executeUpdate();
+            success = (affectedRows > 0);
+        } catch (SQLException e) {
+            System.getLogger(EmployeeUserDAO.class.getName())
+                    .log(System.Logger.Level.ERROR, "Error al actualizar información de contacto de EmployeeUserDTO", e);
+            success = false;
         }
+        return success;
+    }
 
-        // Si el operador no modificó ningún valor en Swing, evitamos el tráfico a la BD
-        if (setColumns.isEmpty()) {
-            return false;
-        }
+    private EmployeeUserDTO mapRow(ResultSet rs) throws SQLException {
+        EmployeeUserDTO dto = new EmployeeUserDTO();
+        dto.setId(rs.getInt("id"));
+        dto.setEmployee_id(rs.getInt("employee_id"));
+        dto.setOffice_id(rs.getInt("office_id"));
+        dto.setUser(rs.getString("user"));
+        dto.setPassword(rs.getString("password"));
+        dto.setDescription(rs.getString("description"));
+        dto.setEmail(rs.getString("email"));
+        dto.setPhone_number(rs.getString("phone_number"));
+        dto.setEmployee_type(rs.getInt("employee_type"));
+        dto.setStatus(rs.getInt("status"));
+        dto.setLast_employee_update(rs.getInt("last_employee_update"));
+        dto.setLast_update_password(toLocalDateTime(rs.getTimestamp("last_update_password")));
+        dto.setDate_update(toLocalDateTime(rs.getTimestamp("date_update")));
+        dto.setDate_register(toLocalDateTime(rs.getTimestamp("date_register")));
+        dto.setDate_end(toLocalDateTime(rs.getTimestamp("date_end")));
+        return dto;
+    }
 
-        // Adición del operador responsable del cambio
-        setColumns.add("last_employee_update");
-        parameters.add(Integer.valueOf(newUser.getLastEmployeeUpdate()));
-
-        String setClause = String.join("=?, ", setColumns) + "=?";
-        String query = "UPDATE emp_user SET " + setClause + " WHERE id = ?";
-
-        try (Connection conn = connection.getConnection(); PreparedStatement ps = conn.prepareStatement(query)) {
-            int index = 1;
-            for (Object param : parameters) {
-                if (param == null) {
-                    ps.setNull(index, Types.VARCHAR);
-                } else if (param instanceof Integer intValue) {
-                    ps.setInt(index, intValue);
-                } else {
-                    ps.setObject(index, param);
-                }
-                index++;
-            }
-
-            // Llave primaria del registro a actualizar (WHERE id = ?)
-            ps.setInt(index, Integer.parseInt(newUser.getId()));
-            return ps.executeUpdate() > 0;
+    private void setTimestampOrNull(PreparedStatement pstmt, int index, LocalDateTime value) throws SQLException {
+        if (value != null) {
+            pstmt.setTimestamp(index, Timestamp.valueOf(value));
+        } else {
+            pstmt.setNull(index, Types.TIMESTAMP);
         }
     }
 
-    /**
-     * Ejecuta la sentencia SQL UPDATE directamente en la tabla emp_user.
-     *
-     * * @param connection Conexión JDBC limpia.
-     * @param map fields del DTO con los Strings de transporte.
-     * @return true si se afectó la fila esperada; de lo contrario, false.
-     * @throws DataAccesObjectException Si ocurre un error de sintaxis o bloqueo
-     * en MySQL.
-     */
-    public boolean updateCredential(JDBConnection connection, String id, String current_employee, String user, String password) throws SQLException, CorruptUpdateException {
-        boolean res = false;
-        // Consulta SQL estructurada según tu DDL de emp_user
-        String sql = "UPDATE emp_user SET user = ?, password = ?, last_employee_update = ?, last_update_password = CURRENT_TIMESTAMP WHERE id = ?";
-        try (PreparedStatement ps = connection.getNewPreparedStatement(sql);) {
-            // Mapeo manual y casteo final según el requerimiento de la columna en MySQL
-            ps.setString(1, user);
-            ps.setString(2, password); // Aquí ya va el String de 60 caracteres de BCrypt
-            ps.setString(3, current_employee);
-            ps.setString(4, id); // Cast final de String a Integer para la PK
-            int rowsAffected = ps.executeUpdate();
-            res = rowsAffected > 0;
-            if (!res) {
-                throw new CorruptUpdateException("EL MOVIMIENTO ACTUALIZO 0 REGISTROS");
-            }
-        }
-        return res;
-    }
-
-    private <T> void autoSet(T oldValue, T newValue, String columnName, List<String> setColumns, List<Object> parameters) {
-        if (!java.util.Objects.equals(oldValue, newValue)) {
-            setColumns.add(columnName);
-            parameters.add(newValue);
-        }
+    private LocalDateTime toLocalDateTime(Timestamp timestamp) {
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
     }
 }

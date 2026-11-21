@@ -84,11 +84,11 @@ public class SessionDAO extends AbstractDAO {
         return res;
     }
 
-    public boolean haveActiveSession(JDBConnection connection, String employee_id) throws SQLException {
+    public boolean haveActiveSession(JDBConnection connection, int employee_id) throws SQLException {
         boolean res = false;
         String query = "SELECT id FROM hys_session WHERE employee_id = ? AND status = 1";
         try (PreparedStatement ps = connection.getNewPreparedStatement(query)) {
-            ps.setString(1, employee_id);
+            ps.setInt(1, employee_id);
             try (ResultSet rs = ps.executeQuery()) {
                 res = rs.next();
             }
